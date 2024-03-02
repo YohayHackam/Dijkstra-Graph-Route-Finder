@@ -2,7 +2,7 @@ import math
 
 
 class Cordinate():
-    def __init__(self,longitude:float,latitude:float) -> None:
+    def __init__(self,latitude:float,longitude:float) -> None:
         self.longitude = longitude
         self.latitude = latitude
         self.visited = False
@@ -11,7 +11,7 @@ class Cordinate():
         self.path =[]   
 
     def get_cords(self) -> tuple[float,float]:
-        return (self.longitude,self.latitude)
+        return (self.latitude,self.longitude)
 
     def set_visited(self) -> None:
         self.visited =True
@@ -31,8 +31,8 @@ class Cordinate():
     def set_target_distance(self,distance) -> None:
         self.target_distance = distance
     
-    def calculate_distance(self,longitude:float,latitude:float) -> float:
-        return math.sqrt((self.longitude - longitude)**2 + (self.latitude - latitude)**2)        
+    def calculate_distance(self,latitude:float,longitude:float) -> float:
+        return math.sqrt((self.latitude - latitude)**2 + (self.longitude - longitude)**2)        
     
     def get_path(self):
         return self.path  

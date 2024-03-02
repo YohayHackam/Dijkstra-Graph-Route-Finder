@@ -7,7 +7,6 @@ app = Flask(__name__)
 
 with open('graph_example.json') as f:
     graph_data = json.load(f)
-    graph = Graph(graph_data)
     
 
 @app.route('/')
@@ -17,6 +16,7 @@ def index():
 
 @app.route('/shortest_path', methods=['POST'])
 def post_shortest_path():
+    graph = Graph(graph_data)
     data = request.get_json()
     try:
         start_point = html.escape(data['start_point'])
