@@ -17,8 +17,8 @@ def index():
 @app.route('/shortest_path', methods=['POST'])
 def post_shortest_path():
     graph = Graph(graph_data)
-    data = request.get_json()
     try:
+        data = request.get_json()
         start_point = html.escape(data['start_point'])
         end_point = html.escape(data['end_point'])        
         start_point = tuple(float(cord) for cord in start_point.strip("[{()}]").split(','))
