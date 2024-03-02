@@ -21,6 +21,6 @@ def generate_kml(path:list[tuple]) -> KmlElement:
         elif (i== len(path)-1):
             cord_name = "End Point"
         else:
-            cord_name = f"Cordinate {i}" 
+            cord_name = f"Coordinate {i}" 
         kml.newpoint(name=cord_name, coords=[cord]) 
     return kml.kml()

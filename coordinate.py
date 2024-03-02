@@ -3,7 +3,7 @@ import math
 
 # The `Coordinate` class represents a coordinate with latitude and longitude, providing methods to
 # manage visited status, distance, target distance, and path.
-class Cordinate():
+class Coordinate():
     def __init__(self,latitude:float,longitude:float) -> None:
         self.longitude = longitude
         self.latitude = latitude
