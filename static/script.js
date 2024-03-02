@@ -59,24 +59,26 @@
                         const startCoords = JSON.parse('[' + startPoint + ']');
                         const endCoords = JSON.parse('[' + endPoint + ']');
                         L.marker(startCoords).addTo(mymap).bindPopup(`Start Point <br/> ${startCoords}`);
-                        L.marker(endCoords).addTo(mymap).bindPopup('End Point');
+                        L.marker(endCoords).addTo(mymap).bindPopup(`End Point <br/> ${endCoords} `);
                         L.polyline(data.shortest_path, { color: 'red' }).addTo(mymap);
 
                         // Set map bounds
                         const bounds = L.latLngBounds(Object.values([...Object.values(data.graph),startCoords,endCoords]).flat());
                         mymap.fitBounds(bounds);
                     }
+                    // on failure Show warning message 
                     else {
                         warning = await res.text()
                         warningContainer = document.getElementById('warning');
                         warningContainer.innerText = warning;
                         warningContainer.classList.remove('hide')
-
-
                     }
                 }
                 catch (error) {
                     console.error('Error:', error);
+                    warningContainer = document.getElementById('warning');
+                    warningContainer.innerText = 'Somthing went wrong  , Cheack your network connection';
+                    warningContainer.classList.remove('hide')
                 }
             })
         })
