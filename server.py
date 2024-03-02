@@ -44,7 +44,4 @@ def post_shortest_path():
 
 
 if __name__ == '__main__':
-    # start = graph.find_closest_cordinate(31, 35)
-    # end = graph.find_closest_cordinate(32, 34)
-    # graph.find_path(start, end)
     app.run(debug=True)
