@@ -89,13 +89,13 @@ function showGraphOnMap(map, graph, shortest_path, startPoint, endPoint) {
             L.polyline([
                 [parsedJunction[0], parsedJunction[1]],
                 [coordinates[i][0], coordinates[i][1]]
-            ], { color: 'blue' }).addTo(map).bindPopup(`<b>${coordinates[i]}</b>`);;
+            ], { color: 'blue' ,opacity:0.2}).addTo(map).bindPopup(`<b>${coordinates[i]}</b>`);;
         }
     }
     junctions.forEach(junction => {
         // Add junctions as green circles    
         const latlng = L.latLng(junction[0], junction[1]);
-        L.circleMarker(latlng, { color: 'green', fillColor: 'green', fillOpacity: 1, radius: 5 })
+        L.circleMarker(latlng, { color: 'green',opacity:0.6, fillOpacity: 0, radius: 3 })
             .addTo(map)
             .bindPopup(`<b>${junction}</b>`);
     });
