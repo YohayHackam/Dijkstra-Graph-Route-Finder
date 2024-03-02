@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Clear previous markers
                 if ('graph' in data && 'shortest_path' in data)
-                    showGraphOnMap(mymap,data.graph,data.shortest_path,startPoint,endPoint);
+                    showGraphOnMap(mymap, data.graph, data.shortest_path, startPoint, endPoint);
 
             }
             // on failure Show warning message 
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
 })
 
 function downloadKml(kmlText) {
-    var blob = new Blob([kmlText], { type: 'text/kml' });    
+    var blob = new Blob([kmlText], { type: 'text/kml' });
     downloadContainer = document.getElementById('download');
     downloadContainer.innerHTML = '';
     var a = document.createElement('a');
@@ -73,29 +73,32 @@ function downloadKml(kmlText) {
     downloadContainer.appendChild(a);
 }
 
-function showGraphOnMap(map, graph, shortest_path,startPoint,endPoint) {
+function showGraphOnMap(map, graph, shortest_path, startPoint, endPoint) {
     map.eachLayer(function (layer) {
         if (layer instanceof L.Marker || layer instanceof L.Path) {
             map.removeLayer(layer);
         }
     });
 
+    let junctions = []
     // Add paths as blue lines
     for (const [junction, coordinates] of Object.entries(graph)) {
-        for (let i = 1; i < coordinates.length; i++) {
+        let parsedJunction = JSON.parse(junction.replace('(', '[').replace(')', ']'));
+        junctions.push(parsedJunction)
+        for (let i = 0; i < coordinates.length; i++) {
             L.polyline([
-                [coordinates[i - 1][0], coordinates[i - 1][1]],
+                [parsedJunction[0], parsedJunction[1]],
                 [coordinates[i][0], coordinates[i][1]]
-            ], { color: 'blue' }).addTo(map).bindPopup(`<b>${junction}</b>`);;
+            ], { color: 'blue' }).addTo(map).bindPopup(`<b>${coordinates[i]}</b>`);;
         }
     }
-    // Add junctions as green circles
-    for (const [junction, coordinates] of Object.entries(graph)) {
-        const latlng = L.latLng(coordinates[0][0], coordinates[0][1]);
+    junctions.forEach(junction => {
+        // Add junctions as green circles    
+        const latlng = L.latLng(junction[0], junction[1]);
         L.circleMarker(latlng, { color: 'green', fillColor: 'green', fillOpacity: 1, radius: 5 })
             .addTo(map)
             .bindPopup(`<b>${junction}</b>`);
-    }
+    });
 
 
     // Add new markers for coordinates
