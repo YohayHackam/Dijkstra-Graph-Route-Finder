@@ -1,6 +1,8 @@
 from cordinate import Cordinate
 
 
+# This class represents a vertex with a location and a list of coordinates, allowing for finding
+# specific coordinates and checking if all coordinates have been visited.
 class Vertex(Cordinate):
     
     def __init__(self,location:str,cordinates:list) -> None:
