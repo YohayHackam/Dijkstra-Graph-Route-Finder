@@ -2,12 +2,12 @@ import html
 from flask import Flask, request, jsonify,render_template,Response
 import json
 from graph import Graph
+from kml import generate_kml
 
 app = Flask(__name__)
 
 with open('graph_example.json') as f:
     graph_data = json.load(f)
-    
 
 @app.route('/')
 def index():
@@ -34,13 +34,14 @@ def post_shortest_path():
         if start_vertex.get_cords() != start_point:
             shortest_path.insert(0,start_point)
         if end_vertex.get_cords() != end_point:
-            shortest_path.append(end_point)
-            
+            shortest_path.append(end_point)        
+        # Genarate Kml
+        kml =generate_kml(shortest_path)
     except ValueError:
         return Response("Bad input",422)
     except Exception:
         return Response("Somthing went wrong",500)
-    return jsonify({"graph":graph_data,"shortest_path": shortest_path})
+    return jsonify({"graph":graph_data,"shortest_path": shortest_path, "kml":kml})
 
 
 if __name__ == '__main__':

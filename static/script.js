@@ -1,87 +1,113 @@
-        document.addEventListener('DOMContentLoaded', function () {
-            const mymap = L.map('map').setView([31.69, 35.33], 8); // Set initial view                        
+document.addEventListener('DOMContentLoaded', function () {
+    const mymap = L.map('map').setView([31.69, 35.33], 8); // Set initial view                        
 
-            // Add base map tiles
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-            }).addTo(mymap);
+    // Add base map tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+    }).addTo(mymap);
 
-            coordinateForm.addEventListener('submit', async function (event) {
-                event.preventDefault();
-                const startPoint = document.getElementById('startPoint').value;
-                const endPoint = document.getElementById('endPoint').value;
-                const data = JSON.stringify({
-                    'start_point': startPoint,
-                    'end_point': endPoint
-                });
-                try {
-                    res = await fetch('/shortest_path', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: data
-                    });
-                    if (res.status >= 200 && res.status < 300) {
-                        // Remove any warning if present 
-                        let data = await res.json();
-                        let warningContainer = document.getElementById('warning');
-                        warningContainer.innerText = ''
-                        if (!warningContainer.classList.contains('hide'))
-                            warningContainer.classList.add('hide');
-                        // Show Results  
-                        document.getElementById('result').innerHTML = '<p class="alert alert-success" >Result: ' + JSON.stringify(data.shortest_path) + '</p>';
-                         // Clear previous markers
-                         mymap.eachLayer(function (layer) {
-                            if (layer instanceof L.Marker || layer instanceof L.Path) {
-                                mymap.removeLayer(layer);
-                            }
-                        });
+    coordinateForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const startPoint = document.getElementById('startPoint').value;
+        const endPoint = document.getElementById('endPoint').value;
+        const data = JSON.stringify({
+            'start_point': startPoint,
+            'end_point': endPoint
+        });
+        try {
+            res = await fetch('/shortest_path', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: data
+            });
+            if (res.status >= 200 && res.status < 300) {
+                // Remove any warning if present 
+                let data = await res.json();
+                let warningContainer = document.getElementById('warning');
+                warningContainer.innerText = ''
+                if (!warningContainer.classList.contains('hide'))
+                    warningContainer.classList.add('hide');
 
-                        // Add paths as blue lines
-                        for (const [junction, coordinates] of Object.entries(data.graph)) {
-                            for (let i = 1; i < coordinates.length; i++) {
-                                L.polyline([
-                                    [coordinates[i - 1][0], coordinates[i - 1][1]],
-                                    [coordinates[i][0], coordinates[i][1]]
-                                ], { color: 'blue' }).addTo(mymap).bindPopup(`<b>${junction}</b>`);;
-                            }
-                        }
-                        // Add junctions as green circles
-                        for (const [junction, coordinates] of Object.entries(data.graph)) {
-                            const latlng = L.latLng(coordinates[0][0], coordinates[0][1]);
-                            L.circleMarker(latlng, { color: 'green', fillColor: 'green', fillOpacity: 1, radius: 5 })
-                                .addTo(mymap)
-                                .bindPopup(`<b>${junction}</b>`);
-                        }
+                // Show Results
+                if ('shortest_path' in data)
+                    document.getElementById('result').innerHTML = '<p class="alert alert-success" >Result: ' + JSON.stringify(data.shortest_path) + '</p>';
 
-                        
-                        // Add new markers for coordinates
-                        const startCoords = JSON.parse('[' + startPoint + ']');
-                        const endCoords = JSON.parse('[' + endPoint + ']');
-                        L.marker(startCoords).addTo(mymap).bindPopup(`Start Point <br/> ${startCoords}`);
-                        L.marker(endCoords).addTo(mymap).bindPopup(`End Point <br/> ${endCoords} `);
-                        L.polyline(data.shortest_path, { color: 'red' }).addTo(mymap);
+                // Create download kml button
+                if ('kml' in data)
+                    downloadKml(data.kml);
 
-                        // Set map bounds
-                        const bounds = L.latLngBounds(Object.values([...Object.values(data.graph),startCoords,endCoords]).flat());
-                        mymap.fitBounds(bounds);
+                // Clear previous markers
+                if ('graph' in data && 'shortest_path' in data)
+                    showGraphOnMap(mymap,data.graph,data.shortest_path,startPoint,endPoint);
+
+            }
+            // on failure Show warning message 
+            else {
+                warning = await res.text()
+                warningContainer = document.getElementById('warning');
+                warningContainer.innerText = warning;
+                warningContainer.classList.remove('hide')
+            }
+        }
+        catch (error) {
+            console.error('Error:', error);
+            warningContainer = document.getElementById('warning');
+            warningContainer.innerText = 'Somthing went wrong  , Cheack your network connection';
+            warningContainer.classList.remove('hide')
+        }
+    })
+})
+
+function downloadKml(kmlText) {
+    var blob = new Blob([kmlText], { type: 'text/kml' });    
+    downloadContainer = document.getElementById('download');
+    downloadContainer.innerHTML = '';
+    var a = document.createElement('a');
+    a.innerText = "Download Kml"
+    a.download = 'results.kml';
+    a.className = "btn btn-outline-primary"
+    a.href = URL.createObjectURL(blob);
+    a.dataset.downloadurl = ["kml", a.download, a.href].join(':');
+    downloadContainer.appendChild(a);
+}
+
+function showGraphOnMap(map, graph, shortest_path,startPoint,endPoint) {
+    map.eachLayer(function (layer) {
+        if (layer instanceof L.Marker || layer instanceof L.Path) {
+            map.removeLayer(layer);
+        }
+    });
+
+    // Add paths as blue lines
+    for (const [junction, coordinates] of Object.entries(graph)) {
+        for (let i = 1; i < coordinates.length; i++) {
+            L.polyline([
+                [coordinates[i - 1][0], coordinates[i - 1][1]],
+                [coordinates[i][0], coordinates[i][1]]
+            ], { color: 'blue' }).addTo(map).bindPopup(`<b>${junction}</b>`);;
+        }
+    }
+    // Add junctions as green circles
+    for (const [junction, coordinates] of Object.entries(graph)) {
+        const latlng = L.latLng(coordinates[0][0], coordinates[0][1]);
+        L.circleMarker(latlng, { color: 'green', fillColor: 'green', fillOpacity: 1, radius: 5 })
+            .addTo(map)
+            .bindPopup(`<b>${junction}</b>`);
+    }
 
 
-                    }
-                    // on failure Show warning message 
-                    else {
-                        warning = await res.text()
-                        warningContainer = document.getElementById('warning');
-                        warningContainer.innerText = warning;
-                        warningContainer.classList.remove('hide')
-                    }
-                }
-                catch (error) {
-                    console.error('Error:', error);
-                    warningContainer = document.getElementById('warning');
-                    warningContainer.innerText = 'Somthing went wrong  , Cheack your network connection';
-                    warningContainer.classList.remove('hide')
-                }
-            })
-        })
+    // Add new markers for coordinates
+    const startCoords = JSON.parse('[' + startPoint + ']');
+    const endCoords = JSON.parse('[' + endPoint + ']');
+    L.marker(startCoords).addTo(map).bindPopup(`Start Point <br/> ${startCoords}`);
+    L.marker(endCoords).addTo(map).bindPopup(`End Point <br/> ${endCoords} `);
+    L.polyline(shortest_path, { color: 'red' }).addTo(map);
+
+    // Set map bounds
+    const bounds = L.latLngBounds(Object.values([...Object.values(graph), startCoords, endCoords]).flat());
+    map.fitBounds(bounds);
+
+}
+
