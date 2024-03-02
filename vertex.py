@@ -17,4 +17,16 @@ class Vertex(Cordinate):
         for cordinate in self.cordinates:
             if not cordinate.is_visited() and cords == cordinate.get_cords():
                 return cordinate
-        return None
+        return None    
+    
+    def all_cordinates_visited(self) -> bool :        
+        for cordinate in self.cordinates:
+            if not cordinate.is_visited():
+                return False
+        return True
+        
+        
+    
+        
+
+    

@@ -36,8 +36,12 @@ class Graph():
                     cordinate.set_path([current.get_cords()] + current.get_path())
                 if not cordinate.is_visited():
                     connected_cordinates.append(cordinate)
-        # Mark current codinate as visited 
-        current.set_visited()
+                # Mark current vertex as visited 
+                if current.all_cordinates_visited():
+                      current.set_visited()
+        else:
+            # Mark current codinate as visited 
+            current.set_visited()
         # Cheack if has other vertex connected to this point
         vertices = list(filter(lambda vertex: not vertex.visited,self.vertices))
         for vertex in vertices :
@@ -48,10 +52,11 @@ class Graph():
                 if vertex.target_distance > (cordinate.distance + distance) :
                     vertex.set_target_distance(cordinate.distance + distance)
                     vertex.set_path([cordinate.get_cords()] + cordinate.get_path())
-                # Mark current vertex as visited 
-                if not isinstance(cordinate,Vertex) :
-                    cordinate.set_visited()
-                connected_cordinates.append(vertex)
+                # # Mark current vertex as visited 
+                # if not isinstance(cordinate,Vertex) :
+                #     cordinate.set_visited()
+                if not current==vertex:                    
+                    connected_cordinates.append(vertex)
         connected_cordinates.sort(key= lambda cordinate:cordinate.target_distance)        
         for cord in connected_cordinates:
             if not cord.is_visited():
