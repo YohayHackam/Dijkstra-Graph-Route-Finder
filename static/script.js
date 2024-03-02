@@ -23,13 +23,14 @@
                         body: data
                     });
                     if (res.status >= 200 && res.status < 300) {
+                        // Remove any warning if present 
                         let data = await res.json();
                         let warningContainer = document.getElementById('warning');
                         warningContainer.innerText = ''
                         if (!warningContainer.classList.contains('hide'))
                             warningContainer.classList.add('hide');
-                        document.getElementById('result').innerHTML = '<p>Result: ' + JSON.stringify(data.shortest_path) + '</p>';
-
+                        // Show Results  
+                        document.getElementById('result').innerHTML = '<p class="alert alert-success" >Result: ' + JSON.stringify(data.shortest_path) + '</p>';
                          // Clear previous markers
                          mymap.eachLayer(function (layer) {
                             if (layer instanceof L.Marker || layer instanceof L.Path) {
@@ -65,6 +66,8 @@
                         // Set map bounds
                         const bounds = L.latLngBounds(Object.values([...Object.values(data.graph),startCoords,endCoords]).flat());
                         mymap.fitBounds(bounds);
+
+
                     }
                     // on failure Show warning message 
                     else {
