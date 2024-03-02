@@ -20,7 +20,7 @@ class Graph():
                 min_dist = dist
                 closest_codinate = vertex
             # Check coordinate conected to vertex
-            for coordinate in vertex.cordinates:
+            for coordinate in vertex.coordinates:
                 dist = coordinate.calculate_distance(longitude, latitude)
                 if dist < min_dist:
                     min_dist = dist
@@ -34,7 +34,7 @@ class Graph():
             current.set_target_distance(distance)
         # Mark vertex  curdinates lowest distance from target
         if isinstance(current,Vertex) :
-            for coordinate in current.cordinates:
+            for coordinate in current.coordinates:
                 # Check and update distance & path from target
                 if coordinate.target_distance > (coordinate.distance + distance) :
                     coordinate.set_target_distance(coordinate.distance + distance)
@@ -61,7 +61,7 @@ class Graph():
                 current.set_visited()
         else:
             current.set_visited()
-        # Check Closest cordinates
+        # Check Closest coordinates
         next_cordinates.sort(key= lambda coordinate:coordinate.target_distance)        
         for cord in next_cordinates:
             if not cord.is_visited():
