@@ -10,7 +10,7 @@ class Graph():
         for str_cords, path_list in graph_data.items():
             self.vertices.append(Vertex(str_cords, path_list))
 
-    def find_closest_cordinate(self,longitude: float, latitude: float) -> Coordinate:
+    def find_closest_coordinate(self,longitude: float, latitude: float) -> Coordinate:
         min_dist = float('inf')
         closest_codinate = None
         for vertex in self.vertices:
@@ -28,7 +28,7 @@ class Graph():
         return closest_codinate
     
     def update_connected_path(self,current:Coordinate,distance:float):
-        next_cordinates=[]
+        next_coordinates=[]
         # Mark lowest coordinate distance from target
         if current.target_distance > distance :
             current.set_target_distance(distance)
@@ -41,12 +41,12 @@ class Graph():
                     coordinate.set_path([current.get_cords()] + current.get_path())
                 # Add only unvisited to visit next 
                 if not coordinate.is_visited():
-                    next_cordinates.append(coordinate)
+                    next_coordinates.append(coordinate)
         
         # Check all unvisited vertices if connected to this coordinate
         vertices = list(filter(lambda vertex: not vertex.visited and current!=vertex ,self.vertices))
         for vertex in vertices :
-            if(coordinate:=vertex.find_cordinate(current.get_cords())):                
+            if(coordinate:=vertex.find_coordinate(current.get_cords())):                
                 # Check and update distance & path from target
                 if coordinate.target_distance > distance :
                     coordinate.set_target_distance(distance)                
@@ -54,16 +54,16 @@ class Graph():
                 if vertex.target_distance > (coordinate.distance + distance) :
                     vertex.set_target_distance(coordinate.distance + distance)
                     vertex.set_path([coordinate.get_cords()] + coordinate.get_path())                
-                next_cordinates.append(vertex)
+                next_coordinates.append(vertex)
         # Mark as visited 
         if isinstance(current,Vertex):            
-            if current.all_cordinates_visited():
+            if current.all_coordinates_visited():
                 current.set_visited()
         else:
             current.set_visited()
         # Check Closest coordinates
-        next_cordinates.sort(key= lambda coordinate:coordinate.target_distance)        
-        for cord in next_cordinates:
+        next_coordinates.sort(key= lambda coordinate:coordinate.target_distance)        
+        for cord in next_coordinates:
             if not cord.is_visited():
                 distance = cord.get_target_distance()                
                 self.update_connected_path(cord,distance)

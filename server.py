@@ -26,8 +26,8 @@ def post_shortest_path():
         if not(len(start_point)==2 and len(end_point)==2):
             raise(ValueError)
         # Find the closest vertices to the start and end points
-        start_vertex = graph.find_closest_cordinate(*start_point)
-        end_vertex = graph.find_closest_cordinate(*end_point)
+        start_vertex = graph.find_closest_coordinate(*start_point)
+        end_vertex = graph.find_closest_coordinate(*end_point)
         # Compute the shortest path
         shortest_path = graph.find_path( start_vertex, end_vertex)
         # Add start & end points if outside graph

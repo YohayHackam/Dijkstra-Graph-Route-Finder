@@ -13,7 +13,7 @@ class Vertex(Coordinate):
             distance = coordinate.calculate_distance(self.longitude,self.latitude)    
             coordinate.set_distance(distance)    
     
-    def find_cordinate(self,cords:list[float,float]) -> Coordinate | None:
+    def find_coordinate(self,cords:list[float,float]) -> Coordinate | None:
         if not self.is_visited() and cords == self.get_cords():
             return self 
         for coordinate in self.coordinates:
@@ -21,7 +21,7 @@ class Vertex(Coordinate):
                 return coordinate
         return None    
     
-    def all_cordinates_visited(self) -> bool :        
+    def all_coordinates_visited(self) -> bool :        
         for coordinate in self.coordinates:
             if not coordinate.is_visited():
                 return False
