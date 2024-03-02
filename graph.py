@@ -32,7 +32,7 @@ class Graph():
         # Mark lowest coordinate distance from target
         if current.target_distance > distance :
             current.set_target_distance(distance)
-        # Mark vertex  curdinates lowest distance from target
+        # Mark vertex  coordinates lowest distance from target
         if isinstance(current,Vertex) :
             for coordinate in current.coordinates:
                 # Check and update distance & path from target
