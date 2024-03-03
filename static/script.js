@@ -33,15 +33,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Show Results
                 if ('shortest_path' in data)
                     document.getElementById('result').innerHTML = '<p class="alert alert-success" >Result: ' + JSON.stringify(data.shortest_path) + '</p>';
+                    showGraphOnMap(mymap, graphData, data.shortest_path, startPoint, endPoint);
 
                 // Create download kml button
                 if ('kml' in data)
                     downloadKml(data.kml);
-
-                // Clear previous markers
-                if ('graph' in data && 'shortest_path' in data)
-                    showGraphOnMap(mymap, data.graph, data.shortest_path, startPoint, endPoint);
-
+                
             }
             // on failure Show warning message 
             else {

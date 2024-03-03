@@ -5,27 +5,39 @@ from coordinate import Coordinate
 # specific coordinates and checking if all coordinates have been visited.
 class Vertex(Coordinate):
     
-    def __init__(self,location:str,coordinates:list) -> None:
-        longitude, latitude = [float(cord) for cord in location.strip('()').split(',')]
-        super().__init__(longitude,latitude)
+    def __init__(self,vertex:tuple,coordinates:list) -> None:        
+        super().__init__(*vertex)
+        self.visited = False
+        self.target_distance = float('inf')
+        self.path =[]  
         self.coordinates:list[Coordinate] = [Coordinate(*cords) for cords in coordinates]
         for coordinate in self.coordinates:
             distance = coordinate.calculate_distance(self.longitude,self.latitude)    
             coordinate.set_distance(distance)    
     
-    def find_coordinate(self,cords:list[float,float]) -> Coordinate | None:
-        if not self.is_visited() and cords == self.get_cords():
-            return self 
-        for coordinate in self.coordinates:
-            if not coordinate.is_visited() and cords == coordinate.get_cords():
-                return coordinate
-        return None    
+    def set_visited(self) -> None:
+        self.visited =True
     
-    def all_coordinates_visited(self) -> bool :        
-        for coordinate in self.coordinates:
-            if not coordinate.is_visited():
-                return False
-        return True
+    def is_visited(self) -> bool:
+        return self.visited
+    
+    def get_target_distance(self) -> float:
+        return self.target_distance    
+    
+    def set_target_distance(self,distance) -> None:
+        self.target_distance = distance
+        
+    def get_path(self) -> list:
+        return self.path  
+        
+    def set_path(self,path:list) ->None: 
+        self.path = path        
+    
+    def reset_vertex(self) -> None:
+        self.visited = False
+        self.target_distance = float('inf')
+        self.path =[]   
+
         
         
     

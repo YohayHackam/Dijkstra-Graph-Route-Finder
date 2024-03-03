@@ -3,20 +3,24 @@ from flask import Flask, request, jsonify,render_template,Response
 import json
 from graph import Graph
 from kml import generate_kml
+from util import data_cleanup_and_parsing
 
 app = Flask(__name__)
 
 with open('graph_example.json') as f:
     graph_data = json.load(f)
+    graph_data = data_cleanup_and_parsing(graph_data)
+    graph = Graph(graph_data)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    parsed_graph={str(k):v for k,v in graph_data.items()}
+    return render_template('index.html',graph_data=parsed_graph)
 
 
 @app.route('/shortest_path', methods=['POST'])
 def post_shortest_path():
-    graph = Graph(graph_data)
+    graph.reset_graph()
     try:
         data = request.get_json()
         start_point = html.escape(data['start_point'])
@@ -41,7 +45,8 @@ def post_shortest_path():
         return Response("Bad input",422)
     except Exception:
         return Response("Somthing went wrong",500)
-    return jsonify({"graph":graph_data,"shortest_path": shortest_path, "kml":kml})
+    
+    return jsonify({"shortest_path": shortest_path, "kml":kml})
 
 
 if __name__ == '__main__':

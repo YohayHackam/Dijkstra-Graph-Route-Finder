@@ -19,4 +19,4 @@
    If the request is successful, you will receive a JSON response with the following keys:\
    `shortest_path`: array of coordinates from `start_point` to `end_point`.\
    `kml`: KML format representation of the shortest path.\
-   `graph`: the original predefined graph (which is used by the UI).
+
