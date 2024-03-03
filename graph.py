@@ -9,7 +9,7 @@ class Graph():
         for str_cords, path_list in graph_data.items():
             self.vertices.append(Vertex(str_cords, path_list))
 
-    def find_closest_coordinate(self,longitude: float, latitude: float) -> Vertex:
+    def find_closest_vertex(self,longitude: float, latitude: float) -> Vertex:
         min_dist = float('inf')
         closest_codinate = None
         for vertex in self.vertices:
@@ -22,7 +22,7 @@ class Graph():
     
     def get_vertex(self,coordinate:Coordinate) -> Vertex | None:
         for vertex in self.vertices:
-            if vertex.get_cords() == coordinate.get_cords():
+            if vertex == coordinate:
                 return vertex
                                     
     def dijkstra(self,current:Vertex,distance:float) -> None :

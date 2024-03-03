@@ -20,5 +20,9 @@ class Coordinate():
     def calculate_distance(self,longitude:float,latitude:float) -> float:
         return math.sqrt((self.longitude - longitude)**2 + (self.latitude - latitude)**2)        
     
+    def __eq__(self, other) -> bool:
+        if isinstance(other,Coordinate):
+            return (self.get_cords() == other.get_cords())
+        return False
 
     
