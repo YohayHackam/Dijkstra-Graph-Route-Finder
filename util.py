@@ -1,12 +1,17 @@
 
 def data_cleanup_and_parsing(graph_data) -> dict:
     """
-    The function `data_cleanup_and_parsing` takes graph data, cleans it up, and parses it into a
-    dictionary format.
+    The function `data_cleanup_and_parsing` takes graph data as input, cleans it up, and parses it into
+    a dictionary format.
     
-    :param graph_data: It looks like the code you provided is a function called
-    `data_cleanup_and_parsing` that takes in a dictionary `graph_data` as input. The function seems to
-    be cleaning up and parsing the data in the `graph_data` dictionary to create a new data structure
+    :param graph_data: The function `data_cleanup_and_parsing` takes a dictionary `graph_data` as input,
+    where the keys are string representations of coordinates and the values are lists of paths. The
+    function cleans up and parses this data to create a new dictionary where the keys are tuples of
+    coordinates and the values are lists
+    :return: The function `data_cleanup_and_parsing` returns a dictionary where the keys are source
+    points represented as tuples of float coordinates, and the values are lists of target points also
+    represented as tuples of float coordinates. The function processes the input `graph_data` to clean
+    up and parse the data into this dictionary format.
     """
     data={}    
     for str_cords, path_list in graph_data.items():        

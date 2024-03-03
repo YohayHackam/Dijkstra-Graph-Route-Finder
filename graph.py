@@ -1,10 +1,9 @@
 from coordinate import Coordinate
 from vertex import Vertex
 
-# This class represents a graph data structure with methods to find the closest coordinate, update
-# connected paths, and find a path between two coordinates.
-class Graph():
-
+# This Python class represents a graph data structure with methods for finding the closest coordinate,
+# implementing Dijkstra's algorithm, finding a path between two vertices, and resetting the graph.
+class Graph(): 
     def __init__(self,graph_data:dict) -> None:
         self.vertices = []
         for str_cords, path_list in graph_data.items():

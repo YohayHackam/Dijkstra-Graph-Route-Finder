@@ -1,8 +1,7 @@
 from coordinate import Coordinate
 
-
-# This class represents a vertex with a location and a list of coordinates, allowing for finding
-# specific coordinates and checking if all coordinates have been visited.
+# The Vertex class represents a vertex with coordinates and provides methods to track visited status,
+# target distance, and path.
 class Vertex(Coordinate):
     
     def __init__(self,vertex:tuple,coordinates:list) -> None:        
