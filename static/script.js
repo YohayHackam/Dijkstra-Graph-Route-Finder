@@ -97,10 +97,10 @@ function showGraphOnMap(map, graph, shortest_path, startPoint, endPoint) {
             .bindPopup(`<b>${junction}</b>`);
     });
 
-
+    debugger;
     // Add new markers for coordinates
-    const startCoords = JSON.parse('[' + startPoint + ']');
-    const endCoords = JSON.parse('[' + endPoint + ']');
+    const startCoords = shortest_path[0];
+    const endCoords = shortest_path[shortest_path.length - 1];
     L.marker(startCoords).addTo(map).bindPopup(`Start Point <br/> ${startCoords}`);
     L.marker(endCoords).addTo(map).bindPopup(`End Point <br/> ${endCoords} `);
     L.polyline(shortest_path, { color: 'red' }).addTo(map);
