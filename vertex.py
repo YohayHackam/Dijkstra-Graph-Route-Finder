@@ -4,8 +4,8 @@ from coordinate import Coordinate
 # target distance, and path.
 class Vertex(Coordinate):
     
-    def __init__(self,vertex:tuple,coordinates:list) -> None:        
-        super().__init__(*vertex)
+    def __init__(self,cordinate:tuple,coordinates:list) -> None:        
+        super().__init__(*cordinate)
         self.visited = False
         self.target_distance = float('inf')
         self.path =[]  
