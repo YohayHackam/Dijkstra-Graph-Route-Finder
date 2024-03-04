@@ -48,3 +48,5 @@ Here's how the Dijkstra algorithm works:
 2. For each neighboring vertex of our current vertex, we calculate the distance from the starting point. If the calculated value is lower than the set value, we update the distance.
 3. After setting the distance from the starting point to each neighboring vertex, we mark the current vertex as visited and move on to the nearest neighbor vertex.
 4. We repeat this process until the target vertex is marked as visited. At that point, we know that we have found the shortest path.
+
+[Dijkstra-Graph-Route-Finder](https://github.com/YohayHackam/Dijkstra-Graph-Route-Finder) © 2024 by [Yohay Hackam](https://www.linkedin.com/in/hackam-yohay/) is licensed under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) 
