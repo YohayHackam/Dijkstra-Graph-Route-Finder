@@ -44,7 +44,7 @@ def post_shortest_path():
     except ValueError:
         return Response("Bad input",422)
     except Exception:
-        return Response("Somthing went wrong",500)
+        return Response("Something went wrong",500)
     
     return jsonify({"shortest_path": shortest_path, "kml":kml})
 
